@@ -1,0 +1,91 @@
+{
+  "info": {
+    "name": "Stayo - Member 1",
+    "description": "Postman collection covering Guest Registration & Authentication, Hotel Management, Room Type & Inventory, and Availability Search.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "body": { "mode": "raw", "raw": "{\"name\": \"Test Admin\", \"email\": \"admin@test.com\", \"password\": \"password123\", \"role\": \"admin\"}" },
+            "url": { "raw": "{{baseUrl}}/api/auth/register", "host": [ "{{baseUrl}}" ], "path": [ "api", "auth", "register" ] }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "body": { "mode": "raw", "raw": "{\"email\": \"admin@test.com\", \"password\": \"password123\"}" },
+            "url": { "raw": "{{baseUrl}}/api/auth/login", "host": [ "{{baseUrl}}" ], "path": [ "api", "auth", "login" ] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Hotels",
+      "item": [
+        {
+          "name": "Create Hotel",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" } ],
+            "body": { "mode": "raw", "raw": "{\"name\": \"Grand Plaza\", \"city\": \"New York\", \"amenities\": [\"WiFi\", \"Pool\"], \"rating\": 5}" },
+            "url": { "raw": "{{baseUrl}}/api/hotels", "host": [ "{{baseUrl}}" ], "path": [ "api", "hotels" ] }
+          }
+        },
+        {
+          "name": "Get Hotels",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/hotels", "host": [ "{{baseUrl}}" ], "path": [ "api", "hotels" ] } }
+        }
+      ]
+    },
+    {
+      "name": "Rooms",
+      "item": [
+        {
+          "name": "Delete Room",
+          "request": {
+            "method": "DELETE",
+            "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ],
+            "url": { "raw": "{{baseUrl}}/api/rooms/{{roomId}}", "host": [ "{{baseUrl}}" ], "path": [ "api", "rooms", "{{roomId}}" ] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Availability Search",
+      "item": [
+        {
+          "name": "Search Hotels",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/hotels/search?hotelId={{hotelId}}&checkInDate=2023-11-01&checkOutDate=2023-11-05&guests=2",
+              "host": [ "{{baseUrl}}" ],
+              "path": [ "api", "hotels", "search" ],
+              "query": [
+                { "key": "hotelId", "value": "{{hotelId}}" },
+                { "key": "checkInDate", "value": "2023-11-01" },
+                { "key": "checkOutDate", "value": "2023-11-05" },
+                { "key": "guests", "value": "2" }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5000", "type": "string" },
+    { "key": "token", "value": "your_jwt_token_here", "type": "string" },
+    { "key": "hotelId", "value": "your_hotel_id_here", "type": "string" },
+    { "key": "roomId", "value": "your_room_id_here", "type": "string" }
+  ]
+}
