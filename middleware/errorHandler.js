@@ -3,7 +3,7 @@ const errorHandler = (err, req, res, next) => {
 
   let statusCode = res.statusCode === 200 ? 500 : res.statusCode;
   let message = err.message || 'Internal Server Error';
-  let errorCode = 'SERVER_ERROR';
+  let errorCode = err.errorCode || 'SERVER_ERROR';
 
   if (err.name === 'ValidationError') {
     statusCode = 400;

@@ -24,6 +24,8 @@ const hotelRoutes = require('./routes/hotels');
 const roomTypeRoutes = require('./routes/roomTypes');
 const roomRoutes = require('./routes/rooms');
 const availabilityRoutes = require('./routes/availability');
+const bookingRoutes = require('./routes/bookings');
+const pricingRuleRoutes = require('./routes/pricingRules');
 
 // Mount routes
 app.use('/api/auth', authRoutes);
@@ -32,6 +34,8 @@ app.use('/api/hotels', availabilityRoutes); // This will handle /api/hotels/sear
 app.use('/api/hotels', hotelRoutes); // This handles /api/hotels and /api/hotels/:id
 app.use('/api/room-types', roomTypeRoutes);
 app.use('/api/rooms', roomRoutes);
+app.use('/api/bookings', bookingRoutes);
+app.use('/api/pricing-rules', pricingRuleRoutes);
 
 // Error Handler Middleware
 app.use(errorHandler);

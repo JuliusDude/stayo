@@ -1,0 +1,124 @@
+{
+  "info": {
+    "name": "Stayo - Member 2",
+    "description": "Postman collection covering Reservation Booking Workflow, Dynamic Pricing Rules, Booking Status Management, and Check-in/Check-out.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Pricing Rules",
+      "item": [
+        {
+          "name": "Create Pricing Rule",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{adminToken}}" } ],
+            "body": { "mode": "raw", "raw": "{\"roomTypeId\": \"{{roomTypeId}}\", \"season\": \"weekend\", \"multiplier\": 1.5, \"startDate\": \"2026-12-05\", \"endDate\": \"2026-12-07\"}" },
+            "url": { "raw": "{{baseUrl}}/api/pricing-rules", "host": [ "{{baseUrl}}" ], "path": [ "api", "pricing-rules" ] }
+          }
+        },
+        {
+          "name": "Get Pricing Rules",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/pricing-rules?roomTypeId={{roomTypeId}}",
+              "host": [ "{{baseUrl}}" ],
+              "path": [ "api", "pricing-rules" ],
+              "query": [ { "key": "roomTypeId", "value": "{{roomTypeId}}" } ]
+            }
+          }
+        },
+        {
+          "name": "Update Pricing Rule",
+          "request": {
+            "method": "PUT",
+            "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{adminToken}}" } ],
+            "body": { "mode": "raw", "raw": "{\"multiplier\": 1.75}" },
+            "url": { "raw": "{{baseUrl}}/api/pricing-rules/{{pricingRuleId}}", "host": [ "{{baseUrl}}" ], "path": [ "api", "pricing-rules", "{{pricingRuleId}}" ] }
+          }
+        },
+        {
+          "name": "Delete Pricing Rule",
+          "request": {
+            "method": "DELETE",
+            "header": [ { "key": "Authorization", "value": "Bearer {{adminToken}}" } ],
+            "url": { "raw": "{{baseUrl}}/api/pricing-rules/{{pricingRuleId}}", "host": [ "{{baseUrl}}" ], "path": [ "api", "pricing-rules", "{{pricingRuleId}}" ] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Bookings",
+      "item": [
+        {
+          "name": "Create Booking (Guest)",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{guestToken}}" } ],
+            "body": { "mode": "raw", "raw": "{\"roomTypeId\": \"{{roomTypeId}}\", \"checkInDate\": \"2026-12-04\", \"checkOutDate\": \"2026-12-08\"}" },
+            "url": { "raw": "{{baseUrl}}/api/bookings", "host": [ "{{baseUrl}}" ], "path": [ "api", "bookings" ] }
+          }
+        },
+        {
+          "name": "Get All Bookings (Staff/Admin)",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Authorization", "value": "Bearer {{staffToken}}" } ],
+            "url": { "raw": "{{baseUrl}}/api/bookings", "host": [ "{{baseUrl}}" ], "path": [ "api", "bookings" ] }
+          }
+        },
+        {
+          "name": "Get Booking By Id",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Authorization", "value": "Bearer {{guestToken}}" } ],
+            "url": { "raw": "{{baseUrl}}/api/bookings/{{bookingId}}", "host": [ "{{baseUrl}}" ], "path": [ "api", "bookings", "{{bookingId}}" ] }
+          }
+        },
+        {
+          "name": "Confirm Booking (Staff/Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [ { "key": "Authorization", "value": "Bearer {{staffToken}}" } ],
+            "url": { "raw": "{{baseUrl}}/api/bookings/{{bookingId}}/confirm", "host": [ "{{baseUrl}}" ], "path": [ "api", "bookings", "{{bookingId}}", "confirm" ] }
+          }
+        },
+        {
+          "name": "Check-in (Staff)",
+          "request": {
+            "method": "PUT",
+            "header": [ { "key": "Authorization", "value": "Bearer {{staffToken}}" } ],
+            "url": { "raw": "{{baseUrl}}/api/bookings/{{bookingId}}/checkin", "host": [ "{{baseUrl}}" ], "path": [ "api", "bookings", "{{bookingId}}", "checkin" ] }
+          }
+        },
+        {
+          "name": "Check-out (Staff)",
+          "request": {
+            "method": "PUT",
+            "header": [ { "key": "Authorization", "value": "Bearer {{staffToken}}" } ],
+            "url": { "raw": "{{baseUrl}}/api/bookings/{{bookingId}}/checkout", "host": [ "{{baseUrl}}" ], "path": [ "api", "bookings", "{{bookingId}}", "checkout" ] }
+          }
+        },
+        {
+          "name": "Cancel Booking",
+          "request": {
+            "method": "PUT",
+            "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{guestToken}}" } ],
+            "body": { "mode": "raw", "raw": "{\"reason\": \"Change of plans\"}" },
+            "url": { "raw": "{{baseUrl}}/api/bookings/{{bookingId}}/cancel", "host": [ "{{baseUrl}}" ], "path": [ "api", "bookings", "{{bookingId}}", "cancel" ] }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5000", "type": "string" },
+    { "key": "guestToken", "value": "your_guest_jwt_here", "type": "string" },
+    { "key": "staffToken", "value": "your_staff_jwt_here", "type": "string" },
+    { "key": "adminToken", "value": "your_admin_jwt_here", "type": "string" },
+    { "key": "roomTypeId", "value": "your_room_type_id_here", "type": "string" },
+    { "key": "bookingId", "value": "your_booking_id_here", "type": "string" },
+    { "key": "pricingRuleId", "value": "your_pricing_rule_id_here", "type": "string" }
+  ]
+}
