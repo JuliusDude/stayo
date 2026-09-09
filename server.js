@@ -26,9 +26,16 @@ const roomRoutes = require('./routes/rooms');
 const availabilityRoutes = require('./routes/availability');
 const bookingRoutes = require('./routes/bookings');
 const pricingRuleRoutes = require('./routes/pricingRules');
+const housekeepingRoutes = require('./routes/housekeeping');
+const historyRoutes =  require('./routes/history');
+const invoiceRoutes =  require('./routes/invoices');
+const reportRoutes =  require('./routes/reports');
 
 // Mount routes
 app.use('/api/auth', authRoutes);
+app.use('/api/history', historyRoutes);
+app.use('/api/invoices', invoiceRoutes);
+app.use('/api/reports', reportRoutes);
 // We mount availability under /api/hotels to satisfy GET /api/hotels/search requirement 
 app.use('/api/hotels', availabilityRoutes); // This will handle /api/hotels/search
 app.use('/api/hotels', hotelRoutes); // This handles /api/hotels and /api/hotels/:id
@@ -36,7 +43,7 @@ app.use('/api/room-types', roomTypeRoutes);
 app.use('/api/rooms', roomRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/pricing-rules', pricingRuleRoutes);
-
+app.use('/api/housekeeping', housekeepingRoutes);
 // Error Handler Middleware
 app.use(errorHandler);
 
