@@ -3,6 +3,7 @@ const Room = require('../models/Room');
 const RoomType = require('../models/RoomType');
 const PricingRule = require('../models/PricingRule');
 const { calculateBookingPrice } = require('../utils/pricingCalculator');
+const { calculateRefund } = require('../utils/refundCalculator');
 
 // Small helper so every thrown error carries a specific errorCode instead of
 // falling through to the generic "SERVER_ERROR" default in errorHandler.js
@@ -213,28 +214,83 @@ exports.checkOutBooking = async (req, res, next) => {
 //          Refund Policy Engine module - refundAmount is left for them to set.
 exports.cancelBooking = async (req, res, next) => {
   try {
-    const existing = await Booking.findById(req.params.id);
+
+    const existing =
+      await Booking.findById(req.params.id);
+
     if (!existing) {
-      fail(res, 404, 'Booking not found', 'NOT_FOUND');
+      return res.status(404).json({
+        success: false,
+        message: 'Booking not found'
+      });
     }
 
-    const isOwner = existing.guestId.toString() === req.user.userId;
-    const isStaffOrAdmin = ['staff', 'admin'].includes(req.user.role);
+
+    const isOwner =
+      existing.guestId.toString() ===
+      req.user.userId;
+
+    const isStaffOrAdmin =
+      ['staff', 'admin'].includes(req.user.role);
+
+
     if (!isOwner && !isStaffOrAdmin) {
-      fail(res, 403, 'Forbidden. You do not have access to this booking.', 'FORBIDDEN');
+      return res.status(403).json({
+        success: false,
+        message:
+          'Forbidden. You do not have access to this booking.'
+      });
     }
 
-    const booking = await applyStatusTransition(req.params.id, 'Cancelled', res);
+
+    const booking =
+      await applyStatusTransition(
+        req.params.id,
+        'Cancelled',
+        res
+      );
+
+
+    // Calculate refund
+    const refundDetails =
+      calculateRefund(
+        booking.totalAmount,
+        booking.checkInDate,
+        new Date()
+      );
+
+
     booking.status = 'Cancelled';
+
+
     booking.cancellation = {
       cancelledAt: new Date(),
-      reason: req.body.reason || 'Not specified'
-      // refundAmount intentionally left unset - see Member 3's refund engine
+
+      reason:
+        req.body.reason ||
+        'Not specified',
+
+      refundAmount:
+        refundDetails.refundAmount
     };
+
+
     await booking.save();
 
-    res.json({ success: true, data: booking });
+
+    res.json({
+      success: true,
+
+      message:
+        'Booking cancelled successfully',
+
+      refund: refundDetails,
+
+      data: booking
+    });
+
   } catch (error) {
     next(error);
   }
 };
+
