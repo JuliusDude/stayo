@@ -276,3 +276,72 @@ async (req, res, next) => {
   }
 
 };
+
+// @desc    Get revenue report
+// @route   GET /api/reports/revenue
+// @access  Private/Admin
+exports.getRevenueReport = async (req, res, next) => {
+  try {
+    const { startDate, endDate, hotelId } = req.query;
+
+    if (!startDate || !endDate) {
+      return res.status(400).json({
+        success: false,
+        message: 'startDate and endDate are required'
+      });
+    }
+
+    const reportStart = new Date(startDate);
+    const reportEnd = new Date(endDate);
+
+    if (reportStart >= reportEnd) {
+      return res.status(400).json({
+        success: false,
+        message: 'endDate must be after startDate'
+      });
+    }
+
+    const query = {
+      status: {
+        $in: ['Reserved', 'Confirmed', 'Checked-in', 'Checked-out']
+      },
+      checkInDate: { $lt: reportEnd },
+      checkOutDate: { $gt: reportStart }
+    };
+
+    if (hotelId) {
+      query.hotelId = hotelId;
+    }
+
+    const bookings = await Booking.find(query);
+
+    const revenueByProperty = {};
+
+    bookings.forEach(booking => {
+      const hId = booking.hotelId.toString();
+      if (!revenueByProperty[hId]) {
+        revenueByProperty[hId] = {
+          hotelId: hId,
+          totalRevenue: 0,
+          totalBookings: 0
+        };
+      }
+      revenueByProperty[hId].totalRevenue += booking.totalAmount;
+      revenueByProperty[hId].totalBookings += 1;
+    });
+
+    res.json({
+      success: true,
+      data: {
+        period: {
+          startDate: reportStart,
+          endDate: reportEnd
+        },
+        revenuePerProperty: Object.values(revenueByProperty)
+      }
+    });
+
+  } catch (error) {
+    next(error);
+  }
+};

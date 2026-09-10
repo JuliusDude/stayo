@@ -25,6 +25,15 @@
             "body": { "mode": "raw", "raw": "{\"email\": \"admin@test.com\", \"password\": \"password123\"}" },
             "url": { "raw": "{{baseUrl}}/api/auth/login", "host": [ "{{baseUrl}}" ], "path": [ "api", "auth", "login" ] }
           }
+        },
+        {
+          "name": "Login - Invalid Credentials (Negative)",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "body": { "mode": "raw", "raw": "{\"email\": \"admin@test.com\", \"password\": \"wrongpassword\"}" },
+            "url": { "raw": "{{baseUrl}}/api/auth/login", "host": [ "{{baseUrl}}" ], "path": [ "api", "auth", "login" ] }
+          }
         }
       ]
     },
@@ -47,8 +56,71 @@
       ]
     },
     {
+      "name": "Room Types",
+      "item": [
+        {
+          "name": "Create Room Type",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" } ],
+            "body": { "mode": "raw", "raw": "{\"hotelId\": \"{{hotelId}}\", \"name\": \"Deluxe Suite\", \"description\": \"A nice suite\", \"basePrice\": 200, \"capacity\": 2}" },
+            "url": { "raw": "{{baseUrl}}/api/room-types", "host": [ "{{baseUrl}}" ], "path": [ "api", "room-types" ] }
+          }
+        },
+        {
+          "name": "Get Room Types",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/room-types?hotelId={{hotelId}}", "host": [ "{{baseUrl}}" ], "path": [ "api", "room-types" ], "query": [{ "key": "hotelId", "value": "{{hotelId}}" }] }
+          }
+        },
+        {
+          "name": "Update Room Type",
+          "request": {
+            "method": "PUT",
+            "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" } ],
+            "body": { "mode": "raw", "raw": "{\"basePrice\": 250}" },
+            "url": { "raw": "{{baseUrl}}/api/room-types/{{roomTypeId}}", "host": [ "{{baseUrl}}" ], "path": [ "api", "room-types", "{{roomTypeId}}" ] }
+          }
+        },
+        {
+          "name": "Delete Room Type",
+          "request": {
+            "method": "DELETE",
+            "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ],
+            "url": { "raw": "{{baseUrl}}/api/room-types/{{roomTypeId}}", "host": [ "{{baseUrl}}" ], "path": [ "api", "room-types", "{{roomTypeId}}" ] }
+          }
+        }
+      ]
+    },
+    {
       "name": "Rooms",
       "item": [
+        {
+          "name": "Create Room",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" } ],
+            "body": { "mode": "raw", "raw": "{\"roomTypeId\": \"{{roomTypeId}}\", \"roomNumber\": \"101\"}" },
+            "url": { "raw": "{{baseUrl}}/api/rooms", "host": [ "{{baseUrl}}" ], "path": [ "api", "rooms" ] }
+          }
+        },
+        {
+          "name": "Get Rooms",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/rooms?roomTypeId={{roomTypeId}}", "host": [ "{{baseUrl}}" ], "path": [ "api", "rooms" ], "query": [{ "key": "roomTypeId", "value": "{{roomTypeId}}" }] }
+          }
+        },
+        {
+          "name": "Update Room",
+          "request": {
+            "method": "PUT",
+            "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" } ],
+            "body": { "mode": "raw", "raw": "{\"roomNumber\": \"101A\"}" },
+            "url": { "raw": "{{baseUrl}}/api/rooms/{{roomId}}", "host": [ "{{baseUrl}}" ], "path": [ "api", "rooms", "{{roomId}}" ] }
+          }
+        },
         {
           "name": "Delete Room",
           "request": {
@@ -78,6 +150,24 @@
               ]
             }
           }
+        },
+        {
+          "name": "Search Overlapping Availability (Negative)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/hotels/search?hotelId={{hotelId}}&checkInDate=2023-11-01&checkOutDate=2023-11-05&guests=2",
+              "host": [ "{{baseUrl}}" ],
+              "path": [ "api", "hotels", "search" ],
+              "query": [
+                { "key": "hotelId", "value": "{{hotelId}}" },
+                { "key": "checkInDate", "value": "2023-11-01" },
+                { "key": "checkOutDate", "value": "2023-11-05" },
+                { "key": "guests", "value": "2" }
+              ],
+              "description": "Simulates a search where a room is already fully booked for the given dates."
+            }
+          }
         }
       ]
     }
@@ -86,6 +176,7 @@
     { "key": "baseUrl", "value": "http://localhost:5000", "type": "string" },
     { "key": "token", "value": "your_jwt_token_here", "type": "string" },
     { "key": "hotelId", "value": "your_hotel_id_here", "type": "string" },
+    { "key": "roomTypeId", "value": "your_room_type_id_here", "type": "string" },
     { "key": "roomId", "value": "your_room_id_here", "type": "string" }
   ]
 }

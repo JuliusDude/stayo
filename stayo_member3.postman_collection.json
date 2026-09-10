@@ -1,0 +1,121 @@
+{
+  "info": {
+    "name": "Stayo - Member 3",
+    "description": "Postman collection covering Housekeeping, Booking History, Invoice Generation, Occupancy Reports, and Revenue Report.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Housekeeping",
+      "item": [
+        {
+          "name": "Get Housekeeping Tasks",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Authorization", "value": "Bearer {{staffToken}}" } ],
+            "url": { "raw": "{{baseUrl}}/api/housekeeping", "host": [ "{{baseUrl}}" ], "path": [ "api", "housekeeping" ] }
+          }
+        },
+        {
+          "name": "Create Housekeeping Task",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{staffToken}}" } ],
+            "body": { "mode": "raw", "raw": "{\"roomId\": \"{{roomId}}\", \"taskType\": \"Cleaning\", \"assignedTo\": \"user_id\"}" },
+            "url": { "raw": "{{baseUrl}}/api/housekeeping", "host": [ "{{baseUrl}}" ], "path": [ "api", "housekeeping" ] }
+          }
+        },
+        {
+          "name": "Update Task Status",
+          "request": {
+            "method": "PUT",
+            "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{staffToken}}" } ],
+            "body": { "mode": "raw", "raw": "{\"status\": \"Completed\"}" },
+            "url": { "raw": "{{baseUrl}}/api/housekeeping/{{taskId}}", "host": [ "{{baseUrl}}" ], "path": [ "api", "housekeeping", "{{taskId}}" ] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Booking History",
+      "item": [
+        {
+          "name": "Get User Booking History",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Authorization", "value": "Bearer {{guestToken}}" } ],
+            "url": { "raw": "{{baseUrl}}/api/history/bookings", "host": [ "{{baseUrl}}" ], "path": [ "api", "history", "bookings" ] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Invoices",
+      "item": [
+        {
+          "name": "Generate Invoice",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Authorization", "value": "Bearer {{staffToken}}" } ],
+            "url": { "raw": "{{baseUrl}}/api/invoices/generate/{{bookingId}}", "host": [ "{{baseUrl}}" ], "path": [ "api", "invoices", "generate", "{{bookingId}}" ] }
+          }
+        },
+        {
+          "name": "Get Invoice",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Authorization", "value": "Bearer {{guestToken}}" } ],
+            "url": { "raw": "{{baseUrl}}/api/invoices/{{invoiceId}}", "host": [ "{{baseUrl}}" ], "path": [ "api", "invoices", "{{invoiceId}}" ] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reports",
+      "item": [
+        {
+          "name": "Occupancy Report",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Authorization", "value": "Bearer {{adminToken}}" } ],
+            "url": { 
+              "raw": "{{baseUrl}}/api/reports/occupancy?startDate=2023-11-01&endDate=2023-11-30",
+              "host": [ "{{baseUrl}}" ],
+              "path": [ "api", "reports", "occupancy" ],
+              "query": [
+                { "key": "startDate", "value": "2023-11-01" },
+                { "key": "endDate", "value": "2023-11-30" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Revenue Report",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Authorization", "value": "Bearer {{adminToken}}" } ],
+            "url": { 
+              "raw": "{{baseUrl}}/api/reports/revenue?startDate=2023-11-01&endDate=2023-11-30",
+              "host": [ "{{baseUrl}}" ],
+              "path": [ "api", "reports", "revenue" ],
+              "query": [
+                { "key": "startDate", "value": "2023-11-01" },
+                { "key": "endDate", "value": "2023-11-30" }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5000", "type": "string" },
+    { "key": "guestToken", "value": "your_guest_jwt_here", "type": "string" },
+    { "key": "staffToken", "value": "your_staff_jwt_here", "type": "string" },
+    { "key": "adminToken", "value": "your_admin_jwt_here", "type": "string" },
+    { "key": "roomId", "value": "your_room_id_here", "type": "string" },
+    { "key": "taskId", "value": "your_task_id_here", "type": "string" },
+    { "key": "bookingId", "value": "your_booking_id_here", "type": "string" },
+    { "key": "invoiceId", "value": "your_invoice_id_here", "type": "string" }
+  ]
+}

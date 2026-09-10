@@ -42,6 +42,12 @@ const bookingSchema = new mongoose.Schema({
     required: true,
     min: 0
   },
+  taxes: {
+    type: Number
+  },
+  addOns: {
+    type: Number
+  },
   actualCheckInAt: {
     type: Date
   },

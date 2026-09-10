@@ -75,6 +75,9 @@ exports.generateInvoice = async (req, res, next) => {
     }
 
 
+    const totalAmount = booking.totalAmount || 0;
+    const taxes = booking.taxes !== undefined ? booking.taxes : totalAmount * 0.10;
+    const addOns = booking.addOns || 0;
     const refundAmount =
       booking.cancellation?.refundAmount || 0;
 
@@ -131,14 +134,19 @@ exports.generateInvoice = async (req, res, next) => {
         booking.status,
 
       totalAmount:
-        booking.totalAmount,
+        totalAmount,
+
+      taxes:
+        taxes,
+
+      addOns:
+        addOns,
 
       refundAmount:
         refundAmount,
 
       finalAmount:
-        booking.totalAmount -
-        refundAmount
+        totalAmount + taxes + addOns - refundAmount
 
     };
 

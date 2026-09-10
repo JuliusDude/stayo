@@ -61,6 +61,16 @@
           }
         },
         {
+          "name": "Create Booking - Conflict (Negative)",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{guestToken}}" } ],
+            "body": { "mode": "raw", "raw": "{\"roomTypeId\": \"{{roomTypeId}}\", \"checkInDate\": \"2026-12-04\", \"checkOutDate\": \"2026-12-08\"}" },
+            "url": { "raw": "{{baseUrl}}/api/bookings", "host": [ "{{baseUrl}}" ], "path": [ "api", "bookings" ] },
+            "description": "Simulates creating a booking for a room type that is already fully booked for the given dates."
+          }
+        },
+        {
           "name": "Get All Bookings (Staff/Admin)",
           "request": {
             "method": "GET",
@@ -98,6 +108,15 @@
             "method": "PUT",
             "header": [ { "key": "Authorization", "value": "Bearer {{staffToken}}" } ],
             "url": { "raw": "{{baseUrl}}/api/bookings/{{bookingId}}/checkout", "host": [ "{{baseUrl}}" ], "path": [ "api", "bookings", "{{bookingId}}", "checkout" ] }
+          }
+        },
+        {
+          "name": "Invalid Status Transition (Negative)",
+          "request": {
+            "method": "PUT",
+            "header": [ { "key": "Authorization", "value": "Bearer {{staffToken}}" } ],
+            "url": { "raw": "{{baseUrl}}/api/bookings/{{bookingId}}/checkout", "host": [ "{{baseUrl}}" ], "path": [ "api", "bookings", "{{bookingId}}", "checkout" ] },
+            "description": "Simulates checking out a booking that hasn't been checked in yet."
           }
         },
         {
