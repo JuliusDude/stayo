@@ -3,291 +3,372 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stayo - Architectural Concierge</title>
+    <title>Stayo | Architectural Stays</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
     <style>
-        /* Design System Tokens */
         :root {
-            --color-primary: #0A3B2C;
-            --color-secondary: #D4AF37;
-            --color-bg: #FAFAFA;
-            --color-surface: #FFFFFF;
-            --color-border: #E0E0E0;
-            --color-text: #121212;
-            --color-text-muted: #6B6B6B;
-
-            --font-family: "Avenir Next", Avenir, sans-serif;
+            --c-bg: #EAEAEA;
+            --c-text: #050505;
+            --c-accent: #2B00FF; /* Ultramarine */
+            --c-border: #050505;
             
-            --space-xs: 4px;
-            --space-sm: 8px;
-            --space-md: 16px;
-            --space-lg: 32px;
-            --space-xl: 64px;
-            --space-xxl: 128px;
+            --f-display: 'Space Grotesk', sans-serif;
+            --f-body: 'Inter', sans-serif;
         }
 
-        /* Base Reset */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: var(--font-family);
-            background-color: var(--color-bg);
-            color: var(--color-text);
-            line-height: 1.6;
+            font-family: var(--f-body);
+            background-color: var(--c-bg);
+            color: var(--c-text);
+            line-height: 1.5;
             -webkit-font-smoothing: antialiased;
+            padding: 1rem;
+        }
+
+        /* The Grid System */
+        .wrapper {
+            display: grid;
+            grid-template-columns: 1fr;
+            min-height: calc(100vh - 2rem);
+            border: 2px solid var(--c-border);
+            background: #fff;
+        }
+
+        @media (min-width: 900px) {
+            .wrapper {
+                grid-template-columns: 35% 65%;
+            }
         }
 
         /* Typography */
-        h1 {
-            font-size: clamp(2.5rem, 5vw, 4rem);
+        h1, h2, h3, .nav-brand {
+            font-family: var(--f-display);
             font-weight: 600;
-            line-height: 1.1;
-            letter-spacing: -0.02em;
-            margin-bottom: var(--space-md);
+        }
+
+        h1 {
+            font-size: clamp(3rem, 6vw, 6rem);
+            line-height: 0.95;
+            letter-spacing: -0.04em;
         }
 
         h2 {
-            font-size: clamp(1.5rem, 3vw, 2.25rem);
-            font-weight: 600;
-            line-height: 1.2;
-            letter-spacing: -0.01em;
-            margin-bottom: var(--space-md);
+            font-size: 2rem;
+            letter-spacing: -0.02em;
         }
 
-        p {
-            font-size: 1rem;
-            max-width: 75ch;
-            margin-bottom: var(--space-md);
+        .text-lead {
+            font-size: 1.125rem;
+            max-width: 35ch;
+            margin-top: 1.5rem;
+            color: #333;
         }
 
-        label, .label {
-            display: block;
-            font-size: 0.875rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--color-text-muted);
-            margin-bottom: var(--space-sm);
+        /* Regions */
+        .sidebar {
+            border-right: 2px solid var(--c-border);
+            display: flex;
+            flex-direction: column;
         }
 
-        /* Layout & Structure */
-        header {
-            border-bottom: 1px solid var(--color-border);
-            padding: var(--space-md) var(--space-lg);
+        @media (max-width: 899px) {
+            .sidebar {
+                border-right: none;
+                border-bottom: 2px solid var(--c-border);
+            }
+        }
+
+        .header {
+            padding: 1.5rem 2rem;
+            border-bottom: 2px solid var(--c-border);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: var(--color-surface);
         }
 
-        .logo {
+        .nav-brand {
             font-size: 1.5rem;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            color: var(--color-primary);
+            text-transform: uppercase;
         }
 
-        main {
-            padding: var(--space-xl) var(--space-lg);
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        /* Hero Section */
-        .hero {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: var(--space-lg);
-            margin-bottom: var(--space-xxl);
-        }
-
-        .hero-image {
-            width: 100%;
-            height: 600px;
-            object-fit: cover;
-            border-radius: 0; /* Architectural rule */
-        }
-
-        .search-panel {
-            background-color: var(--color-surface);
-            border: 1px solid var(--color-border);
-            padding: var(--space-lg);
-            align-self: center;
-        }
-
-        /* Forms & Inputs */
-        .form-group {
-            margin-bottom: var(--space-lg);
-        }
-
-        input[type="text"], input[type="date"], input[type="number"] {
-            width: 100%;
-            padding: var(--space-md);
-            border: 1px solid var(--color-border);
-            border-radius: 2px; /* sm radius */
-            font-family: inherit;
-            font-size: 1rem;
-            background-color: var(--color-surface);
-            color: var(--color-text);
-            transition: border-color 0.2s ease;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: var(--color-primary);
-        }
-
-        /* Buttons */
-        .btn-primary {
-            background-color: var(--color-primary);
-            color: var(--color-surface);
+        .login-btn {
+            background: none;
             border: none;
-            border-radius: 2px;
-            padding: 16px 32px;
-            font-size: 1rem;
+            font-family: var(--f-body);
             font-weight: 500;
             cursor: pointer;
+            color: var(--c-text);
+        }
+
+        .login-btn:hover {
+            color: var(--c-accent);
+        }
+
+        .hero-text {
+            padding: 3rem 2rem;
+            flex-grow: 1;
+        }
+
+        /* Main Content */
+        .main-view {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .search-form {
+            display: grid;
+            grid-template-columns: 1fr;
+            border-bottom: 2px solid var(--c-border);
+        }
+
+        @media (min-width: 700px) {
+            .search-form {
+                grid-template-columns: 1fr 1fr 1fr auto;
+            }
+        }
+
+        .input-group {
+            border-right: 2px solid var(--c-border);
+            padding: 1rem 1.5rem;
+            position: relative;
+        }
+        
+        .input-group:last-child {
+            border-right: none;
+            padding: 0;
+        }
+
+        @media (max-width: 699px) {
+            .input-group {
+                border-right: none;
+                border-bottom: 2px solid var(--c-border);
+            }
+            .input-group:last-child {
+                border-bottom: none;
+            }
+        }
+
+        label {
+            display: block;
+            font-family: var(--f-display);
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--c-text);
+        }
+
+        input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-family: var(--f-body);
+            font-size: 1rem;
+            color: var(--c-text);
+            outline: none;
+        }
+
+        input::placeholder {
+            color: #999;
+        }
+
+        .date-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .date-wrapper span {
+            color: #999;
+        }
+
+        .btn-submit {
+            background-color: var(--c-accent);
+            color: #fff;
+            border: none;
+            font-family: var(--f-display);
+            font-weight: 600;
+            font-size: 1rem;
+            padding: 1.5rem 2rem;
+            cursor: pointer;
+            height: 100%;
             width: 100%;
             transition: background-color 0.2s ease;
         }
 
-        .btn-primary:hover {
-            background-color: #06261c;
-        }
-        
-        .btn-secondary {
-            background-color: transparent;
-            color: var(--color-primary);
-            border: 1px solid var(--color-primary);
-            border-radius: 2px;
-            padding: 8px 16px;
-            font-size: 0.875rem;
-            font-weight: 500;
-            cursor: pointer;
+        .btn-submit:hover {
+            background-color: #1A00CC;
         }
 
-        /* Result Cards */
+        .hero-visual {
+            flex-grow: 1;
+            position: relative;
+            min-height: 500px;
+        }
+
+        .hero-visual img {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover;
+            filter: grayscale(15%) contrast(1.05);
+        }
+
+        /* Results Area */
+        .results {
+            display: none;
+            padding: 3rem 2rem;
+            background: #fff;
+            border-top: 2px solid var(--c-border);
+        }
+
         .results-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: var(--space-lg);
-            margin-top: var(--space-lg);
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
         }
 
-        .card {
-            background-color: var(--color-surface);
-            border: 1px solid var(--color-border);
-            padding: var(--space-md);
-        }
-
-        .card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            margin-bottom: var(--space-md);
-        }
-
-        .card-header {
+        .room-card {
+            border: 2px solid var(--c-border);
             display: flex;
-            justify-content: space-between;
-            align-items: baseline;
+            flex-direction: column;
         }
 
-        .price {
-            font-size: 1.25rem;
+        .room-image {
+            height: 240px;
+            width: 100%;
+            object-fit: cover;
+            border-bottom: 2px solid var(--c-border);
+        }
+
+        .room-details {
+            padding: 1.5rem;
+        }
+
+        .room-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .room-price {
+            font-family: var(--f-display);
             font-weight: 600;
-            color: var(--color-primary);
+            font-size: 1.25rem;
+            color: var(--c-accent);
+            margin-bottom: 1rem;
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .hero {
-                grid-template-columns: 1fr;
-            }
-            .hero-image {
-                height: 300px;
-            }
+        .room-meta {
+            font-size: 0.875rem;
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-reserve {
+            background: transparent;
+            border: 2px solid var(--c-border);
+            font-family: var(--f-display);
+            font-weight: 600;
+            font-size: 0.875rem;
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.2s ease;
+        }
+
+        .btn-reserve:hover {
+            background: var(--c-text);
+            color: #fff;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo">Stayo</div>
-        <nav>
-            <button class="btn-secondary">Admin Login</button>
-        </nav>
-    </header>
+<div class="wrapper">
+    <!-- Left Column: Branding and Copy -->
+    <aside class="sidebar">
+        <header class="header">
+            <div class="nav-brand">Stayo</div>
+            <button class="login-btn">Staff login</button>
+        </header>
+        
+        <div class="hero-text">
+            <h1>Stay in structure.</h1>
+            <p class="text-lead">Book highly curated spaces designed by the world's leading contemporary architects. No compromises, just pure spatial intent.</p>
+        </div>
+    </aside>
 
-    <main>
-        <section class="hero">
-            <div class="search-panel">
-                <h1>Find your next sanctuary.</h1>
-                <p>Experience spaces designed with architectural precision and uncompromising hospitality.</p>
-                
-                <form id="searchForm" onsubmit="event.preventDefault();">
-                    <div class="form-group">
-                        <label>Location</label>
-                        <input type="text" placeholder="Where are you going?">
-                    </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-                        <div class="form-group">
-                            <label>Check-in</label>
-                            <input type="date">
-                        </div>
-                        <div class="form-group">
-                            <label>Check-out</label>
-                            <input type="date">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Guests</label>
-                        <input type="number" min="1" value="2">
-                    </div>
-                    <button type="submit" class="btn-primary" onclick="searchRooms()">Check Availability</button>
-                </form>
+    <!-- Right Column: Interactive and Visual -->
+    <main class="main-view">
+        <!-- Search Bar acts as a technical control panel -->
+        <form class="search-form" id="searchForm" onsubmit="event.preventDefault(); searchRooms();">
+            <div class="input-group">
+                <label for="location">Destination</label>
+                <input type="text" id="location" placeholder="City or region">
             </div>
-            <img src="https://images.unsplash.com/photo-1582719508461-905c673771fd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Minimalist hotel interior" class="hero-image">
-        </section>
+            <div class="input-group">
+                <label for="dates">Dates</label>
+                <div class="date-wrapper">
+                    <input type="date" id="checkin">
+                    <span>-</span>
+                    <input type="date" id="checkout">
+                </div>
+            </div>
+            <div class="input-group">
+                <label for="guests">Guests</label>
+                <input type="number" id="guests" min="1" value="2">
+            </div>
+            <div class="input-group">
+                <button type="submit" class="btn-submit">Search spaces</button>
+            </div>
+        </form>
 
-        <section id="resultsSection" style="display: none;">
-            <h2>Available Rooms</h2>
+        <div class="hero-visual">
+            <img src="https://images.unsplash.com/photo-1600607686527-6fb886090705?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80" alt="Concrete interior with dramatic natural lighting">
+        </div>
+
+        <section class="results" id="resultsSection">
+            <h2>Available spaces</h2>
             <div class="results-grid" id="resultsGrid">
-                <!-- Results will be injected here -->
+                <!-- Injected via JS -->
             </div>
         </section>
     </main>
+</div>
 
-    <script>
-        function searchRooms() {
-            document.getElementById('resultsSection').style.display = 'block';
-            const grid = document.getElementById('resultsGrid');
-            grid.innerHTML = `
-                <div class="card">
-                    <img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Room">
-                    <div class="card-header">
-                        <h3>Superior Double</h3>
-                        <div class="price">$250 / night</div>
-                    </div>
-                    <p class="label" style="margin-top: 8px;">Capacity: 2 Guests</p>
-                    <button class="btn-primary" style="margin-top: 16px; padding: 8px 16px;">Reserve</button>
+<script>
+    function searchRooms() {
+        const resultsEl = document.getElementById('resultsSection');
+        resultsEl.style.display = 'block';
+        
+        const grid = document.getElementById('resultsGrid');
+        grid.innerHTML = `
+            <article class="room-card">
+                <img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Concrete bedroom with minimalist furnishing" class="room-image">
+                <div class="room-details">
+                    <h3 class="room-title">The Brutalist Suite</h3>
+                    <div class="room-price">$250 / night</div>
+                    <p class="room-meta">Sleeps 2 guests</p>
+                    <button class="btn-reserve">Reserve space</button>
                 </div>
-                <div class="card">
-                    <img src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Room">
-                    <div class="card-header">
-                        <h3>Architect Suite</h3>
-                        <div class="price">$450 / night</div>
-                    </div>
-                    <p class="label" style="margin-top: 8px;">Capacity: 4 Guests</p>
-                    <button class="btn-primary" style="margin-top: 16px; padding: 8px 16px;">Reserve</button>
+            </article>
+            <article class="room-card">
+                <img src="https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Glass and steel loft interior" class="room-image">
+                <div class="room-details">
+                    <h3 class="room-title">Glasshouse Pavilion</h3>
+                    <div class="room-price">$450 / night</div>
+                    <p class="room-meta">Sleeps 4 guests</p>
+                    <button class="btn-reserve">Reserve space</button>
                 </div>
-            `;
-            // Scroll to results
-            document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
-        }
-    </script>
+            </article>
+        `;
+        
+        resultsEl.scrollIntoView({ behavior: 'smooth' });
+    }
+</script>
+
 </body>
 </html>
